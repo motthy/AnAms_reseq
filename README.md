@@ -52,3 +52,4 @@ This workflow is forked from  **rice_reseq** https://github.com/nigyta/rice_rese
 | snpEff_genes_{outprefix}.txt | snpEff result for effected genes| 4.2 |
 | snpEff_summary_{outprefix}.html | Summary of snpEff | 4.2 |
 
+コミット練習中
