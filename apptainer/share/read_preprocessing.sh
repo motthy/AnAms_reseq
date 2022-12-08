@@ -14,9 +14,13 @@ ISOLATE=<set sample name>
 # fastq
 FQ1=<set R1_fastq>
 FQ2=<set R1_fastq>
+FQDIR=$(dirname $FQ1)
 
 # working directory
 mkdir $ISOLATE
+WORKDIR=$(pwd)/${ISOLATE}
+
+
 
 # singularity container
 FASTQC=/usr/local/biotools/f/fastqc:0.11.9--hdfd78af_1
@@ -27,17 +31,17 @@ TRIMMOMATIC=/usr/local/biotools/t/trimmomatic:0.39--hdfd78af_2
 cd $ISOLATE
 
 # 1.1 raw readsのstats
-apptainer exec --no-mount tmp $SEQKIT seqkit stats $FQ1 $FQ2 -o read-stats-raw.tsv
+apptainer exec --no-mount tmp -B $FQDIR -B $WORKDIR $SEQKIT seqkit stats $FQ1 $FQ2 -o read-stats-raw.tsv
 
 # 1.2 raw readのqc
-apptainer exec --no-mount tmp $FASTQC fastqc $FQ1 --nogroup -o .
-apptainer exec --no-mount tmp $FASTQC fastqc $FQ2 --nogroup -o .
+apptainer exec --no-mount tmp -B $FQDIR -B $WORKDIR $FASTQC fastqc $FQ1 --nogroup -o .
+apptainer exec --no-mount tmp -B $FQDIR -B $WORKDIR $FASTQC fastqc $FQ2 --nogroup -o .
 
 # 1.3 readsのtrimmingとQC
 # bunzip2 -c $FQ1 > ${SRR_ACC}_1.fq
 # bunzip2 -c $FQ2 > ${SRR_ACC}_2.fq
 
-apptainer exec --no-mount tmp $TRIMMOMATIC trimmomatic PE \
+apptainer exec --no-mount tmp -B $WORKDIR $TRIMMOMATIC trimmomatic PE \
   -threads 8 \
   -phred33 \
   -trimlog out.trimmomatic.log.txt \
@@ -55,9 +59,9 @@ apptainer exec --no-mount tmp $TRIMMOMATIC trimmomatic PE \
   MINLEN:30
 
 # 1.4 trimmed readsのstats
-apptainer exec --no-mount tmp $SEQKIT seqkit stats ${ISOLATE}_1.trim.fq.gz ${ISOLATE}_2.trim.fq.gz -o read-stats.tsv
+apptainer exec --no-mount tmp -B $WORKDIR $SEQKIT seqkit stats ${ISOLATE}_1.trim.fq.gz ${ISOLATE}_2.trim.fq.gz -o read-stats.tsv
 
 # 1.5 trimmed readのqc
-apptainer exec --no-mount tmp $FASTQC fastqc ${ISOLATE}_1.trim.fq.gz --nogroup -o .
-apptainer exec --no-mount tmp $FASTQC fastqc ${ISOLATE}_2.trim.fq.gz --nogroup -o .
+apptainer exec --no-mount tmp -B $WORKDIR $FASTQC fastqc ${ISOLATE}_1.trim.fq.gz --nogroup -o .
+apptainer exec --no-mount tmp -B $WORKDIR $FASTQC fastqc ${ISOLATE}_2.trim.fq.gz --nogroup -o .
 

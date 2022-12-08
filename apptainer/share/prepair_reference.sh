@@ -16,15 +16,17 @@ PICARD=/usr/local/biotools/p/picard:2.26.4--hdfd78af_0
 mkdir ref
 cd ref
 
+REFDIR=$(pwd)
+
 ln -s https://cat.annotation.jp/download/AnAms1.0/AnAms1.0.genome.fa.gz
 
 gunzip AnAms1.0.genome.fa.gz
 
 ## make bwa index
-apptainer exec $BWA bwa index -p AnAms1.0 AnAms1.0.genome.fa
+apptainer exec -B $REFDIR $BWA bwa index -p AnAms1.0 AnAms1.0.genome.fa
 
 ## make GATK dict
-apptainer exec $PICARD java -jar build/libs/picard.jar \
+apptainer exec -B $REFDIR $PICARD java -jar build/libs/picard.jar \
                          CreateSequenceDictionary AnAms1.0.genome.fa
 ## make faidx
-apptainer exec $SAMTOOLS samtools faidx AnAms1.0.genome.fa
+apptainer exec -B $REFDIR $SAMTOOLS samtools faidx AnAms1.0.genome.fa
