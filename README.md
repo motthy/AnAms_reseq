@@ -2,33 +2,35 @@
 
 This workflow is forked from  **rice_reseq** https://github.com/nigyta/rice_reseq
 
+Note: This workflow is under constraction.
+
 ## Workflow
 
-1. Read preprocessing (read_preprocessing.cwl)  
-    1.1 FASTQ stats for raw reads (seqkit stats) __[stats report]__  
-    1.2 Quality check for raw reads (FastQC) __[Report HTML]__  
-    1.3 Adapter trimming and read QC (Trimmomatic) __[summary]__  
-    1.4 FASTQ stats for preprocessed reads (seqkit stats) __[stats report]__  
-    1.5 Read quality check (FastQC) __[Report HTML]__  
-2. Read mapping and BAM conversion (fastq2bam.cwl)  
-    2.1 Read mapping (BWA)  
-    2.2 Convert SAM to BAM (samtools)  
-    2.3 Sort BAM (samtools)  
-    2.4 Create unmapped BAM (Picard FastqToSam)  
-    2.5 Merge mapped and unmapped BAM (Picard Merge)  
-    2.6 Remove duplicated reads (Picard MarkDuplicate) __[BAM, metrics file]__  
-    2.7 Create BAM index (samtools index) __[BAM index (.bai)]__  
-    2.8 Statistics for de-duplicated BAM (samtools stats) __[stats.txt]__  
-    2.9 Extract unmapped reads from BAM (samtools, picard) __[FASTQ]__  
-3. Variant calling, genotyping, filtering (bam2vcf.cwl)  
-    3.1 Variant calling (GATK HaplotypeCaller) __[gVCF, tbi]__  
-    3.2 Genotyping (GATK GenotypeGVCFs)  
-    3.3 Filtering (GATK VariantFiltration)   
-        Filtering condition: "QD < 5.0 || FS > 50.0 || SOR > 3.0 || MQ < 50.0 || MQRankSum < -2.5 || ReadPosRankSum < -1.0 || ReadPosRankSum > 3.5"  
-    3.4 Variant selection for SNP and INDEL (GATK SelectVariants) __[VCF, tbi]__  
-4. Variant Annotation (snpeff_all.cwl)  
-    4.1 Build SnpEff database from reference files (SnpEff build)  
-    4.2 Annotate variants (SnpEff) __[VCF, tbi, summary, effected genes]__  
+1. Read preprocessing (read_preprocessing.cwl)
+    1.1 FASTQ stats for raw reads (seqkit stats) __[stats report]__
+    1.2 Quality check for raw reads (FastQC) __[Report HTML]__
+    1.3 Adapter trimming and read QC (Trimmomatic) __[summary]__
+    1.4 FASTQ stats for preprocessed reads (seqkit stats) __[stats report]__
+    1.5 Read quality check (FastQC) __[Report HTML]__
+2. Read mapping and BAM conversion (fastq2bam.cwl)
+    2.1 Read mapping (BWA)
+    2.2 Convert SAM to BAM (samtools)
+    2.3 Sort BAM (samtools)
+    2.4 Create unmapped BAM (Picard FastqToSam)
+    2.5 Merge mapped and unmapped BAM (Picard Merge)
+    2.6 Remove duplicated reads (Picard MarkDuplicate) __[BAM, metrics file]__
+    2.7 Create BAM index (samtools index) __[BAM index (.bai)]__
+    2.8 Statistics for de-duplicated BAM (samtools stats) __[stats.txt]__
+    2.9 Extract unmapped reads from BAM (samtools, picard) __[FASTQ]__
+3. Variant calling, genotyping, filtering (bam2vcf.cwl)
+    3.1 Variant calling (GATK HaplotypeCaller) __[gVCF, tbi]__
+    3.2 Genotyping (GATK GenotypeGVCFs)
+    3.3 Filtering (GATK VariantFiltration)
+        Filtering condition: "QD < 5.0 || FS > 50.0 || SOR > 3.0 || MQ < 50.0 || MQRankSum < -2.5 || ReadPosRankSum < -1.0 || ReadPosRankSum > 3.5"
+    3.4 Variant selection for SNP and INDEL (GATK SelectVariants) __[VCF, tbi]__
+4. Variant Annotation (snpeff_all.cwl)
+    4.1 Build SnpEff database from reference files (SnpEff build)
+    4.2 Annotate variants (SnpEff) __[VCF, tbi, summary, effected genes]__
 
 ## Output
 |  File name  |  Description  | Step |
