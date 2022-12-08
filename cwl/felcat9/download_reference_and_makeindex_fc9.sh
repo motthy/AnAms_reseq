@@ -5,13 +5,11 @@
 #$ -l d_rt=192:00:00
 #$ -l s_rt=192:00:00
 
-## set bwa path
-
 mkdir ref index
 cd ref
 
-echo Downloading reference files from Cats-I...
-curl -LO https://cat.annotation.jp/download/AnAms1.0/AnAms1.0.genome.fa.gz
+echo Downloading reference files from UCSC...
+curl -LO https://hgdownload-test.gi.ucsc.edu/goldenPath/felCat9/bigZips/felCat9.fa.gz
 echo Done.
 
 echo Uncompressing files...
@@ -20,5 +18,5 @@ echo Done.
 
 cd ../
 echo Making index by bwa
-/your/bwa/path/bwa index -p index/AnAms1.0.genome.fa ref/AnAms1.0.genome.fa
+/your/bwa/path/bwa index -p index/felCat9.fa ref/felCat9.fa
 echo Done.

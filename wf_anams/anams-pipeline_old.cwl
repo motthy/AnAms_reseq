@@ -39,7 +39,7 @@ inputs:
 
 #  dbname:
 #    type: string
-#    default: AnAms1.0.genome
+#    default: RAP_MSU_on_IRGSP-1.0
 
 steps:
   read_preprocessing:
@@ -93,6 +93,13 @@ steps:
       outprefix: outprefix
 #      dbname: dbname
     out: [snpeff_vcf_with_tbi, snpeff_genes, snpeff_summary]
+
+  # bam2tasuke:
+  #   run: ../workflows/bam2tasuke.cwl
+  #   in:
+  #     bam: fastq2bam/rmdup_bam_with_index
+  #     outprefix: outprefix
+  #   out: [tasuke_depth, avg_depth]
 
 outputs:
   read_stats_raw:
@@ -149,3 +156,4 @@ outputs:
   snpeff_summary:
     type: File
     outputSource: snpeff/snpeff_summary
+

@@ -2,10 +2,10 @@
 
 mkdir reference
 cd reference
-echo Downloading reference files from RAP-DB...
-curl -LO https://rapdb.dna.affrc.go.jp/download/archive/genome-wide_variations/IRGSP-1.0_genome_M_C_unanchored.fa.gz
-curl -LO https://rapdb.dna.affrc.go.jp/download/archive/genome-wide_variations/RAP-DB_MSU_concatenated_for_snpEff.gtf.gz
-curl -LO https://rapdb.dna.affrc.go.jp/download/archive/genome-wide_variations/RAP-DB_MSU_concatenated_protein.fa.gz
+echo Downloading reference files from Cats-I...
+curl -LO https://cat.annotation.jp/download/AnAms1.0/AnAms1.0.genome.fa.gz
+# curl -LO https://cat.annotation.jp/download/AnAms1.0/AnAms1.0r1.0.2.gff.gz
+curl -LO https://cat.annotation.jp/download/AnAms1.0/AnAms1.0r1.0.2.prot.fa.gz
 echo Done.
 echo Uncompressing files...
 gunzip *.gz

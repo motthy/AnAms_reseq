@@ -1,7 +1,7 @@
 threads: 4  # default value of type "int".
 reference:  # type "File"
     class: File
-    path: index/AnAms1.0.genome.fa
+    path: index/felCat9.fa
 outprefix: TEST  # type "string"
 fastq2:  # type "File"
     class: File
