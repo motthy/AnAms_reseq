@@ -1,0 +1,11 @@
+threads: 4  # default value of type "int".
+reference:  # type "File"
+    class: File
+    path: index/felCat9.fa
+outprefix: TEST  # type "string"
+fastq2:  # type "File"
+    class: File
+    path: /your/hoge.2.fastq/path/
+fastq1:  # type "File"
+    class: File
+    path: /your/hoge.1.fastq/path/
