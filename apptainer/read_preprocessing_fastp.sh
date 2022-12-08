@@ -6,20 +6,19 @@
 #$ -l s_rt=720:00:00
 #$ -V
 
-## DDBJの/usr/local/resources/dra/fastqから目的のfastqを取得してtrimmingとQCを行う ###
+## QC and trimming fastq ##
 
-# isolate and SRR acccession id
-ISOLATE=24898
-SRR_ACC=SRR1927133
+# isolate id
+ISOLATE=<set sample name>
+
+# fastq
+FQ1=<set R1_fastq>
+FQ2=<set R1_fastq>
+FQDIR=$(dirname $FQ1)
 
 # working directory
 mkdir $ISOLATE
-WORKDIR=/home/mhiromi/rhesus_macaque/ms/${ISOLATE}
-
-# fastq
-FQ1=/ddbj_database/dra/fastq/SRA248/SRA248488/SRX966727/SRR1927133_1.fastq.bz2
-FQ2=/ddbj_database/dra/fastq/SRA248/SRA248488/SRX966727/SRR1927133_2.fastq.bz2
-FQDIR=$(dirname $FQ1)
+WORKDIR=$(pwd)/${ISOLATE}
 
 # singularity container
 FASTQC=/usr/local/biotools/f/fastqc:0.11.9--hdfd78af_1
@@ -30,30 +29,27 @@ FASTP=/usr/local/biotools/f/fastp:0.23.1--h79da9fb_0
 cd $ISOLATE
 
 # 1.1 raw readsのstats
-singularity exec -B $FQDIR -B $WORKDIR $SEQKIT seqkit stats $FQ1 $FQ2 -o read-stats-raw.tsv
+apptainer exec --no-mount tmp -B $FQDIR -B $WORKDIR $SEQKIT seqkit stats $FQ1 $FQ2 -o read-stats-raw.tsv
 
 # 1.2 raw readのqc
-singularity exec -B $FQDIR -B $WORKDIR $FASTQC fastqc $FQ1 --nogroup -o .
-singularity exec -B $FQDIR -B $WORKDIR $FASTQC fastqc $FQ2 --nogroup -o .
+apptainer exec --no-mount tmp -B $FQDIR -B $WORKDIR $FASTQC fastqc $FQ1 --nogroup -o .
+apptainer exec --no-mount tmp -B $FQDIR -B $WORKDIR $FASTQC fastqc $FQ2 --nogroup -o .
 
 # 1.3 readsのtrimmingとQC
-bunzip2 -c $FQ1 > ${SRR_ACC}_1.fq
-bunzip2 -c $FQ2 > ${SRR_ACC}_2.fq
+# bunzip2 -c $FQ1 > ${ISOLATE}_1.fq
+# bunzip2 -c $FQ2 > ${ISOLATE}_2.fq
 
-singularity exec -B $WORKDIR $FASTP fastp \
-    -i ${SRR_ACC}_1.fq -o ${SRR_ACC}_1.trim_fq.gz \
-    -I ${SRR_ACC}_2.fq -O ${SRR_ACC}_2.trim_fq.gz \
-    -h ${SRR_ACC}_report.html \
-    -j ${SRR_ACC}_report.json \
+apptainer exec --no-mount tmp -B $WORKDIR $FASTP fastp \
+    -i $FQ1 -o ${ISOLATE}_1.trim_fq.gz \
+    -I $FQ2 -O ${ISOLATE}_2.trim_fq.gz \
+    -h ${ISOLATE}_report.html \
+    -j ${ISOLATE}_report.json \
 	-w 8
-               
+
 # 1.4 trimmed readsのstats
-singularity exec -B $WORKDIR $SEQKIT seqkit stats ${SRR_ACC}_1.trim.fq.gz ${SRR_ACC}_2.trim.fq.gz -o read-stats.tsv
+apptainer exec --no-mount tmp -B $WORKDIR $SEQKIT seqkit stats ${ISOLATE}_1.trim.fq.gz ${ISOLATE}_2.trim.fq.gz -o read-stats.tsv
 
 # 1.5 trimmed readのqc
-singularity exec -B $WORKDIR $FASTQC fastqc ${SRR_ACC}_1.trim.fq.gz --nogroup -o .
-singularity exec -B $WORKDIR $FASTQC fastqc ${SRR_ACC}_2.trim.fq.gz --nogroup -o .
+apptainer exec --no-mount tmp -B $WORKDIR $FASTQC fastqc ${ISOLATE}_1.trim.fq.gz --nogroup -o .
+apptainer exec --no-mount tmp -B $WORKDIR $FASTQC fastqc ${ISOLATE}_2.trim.fq.gz --nogroup -o .
 
-# remove uncompressed fastq
-#rm ${SRR_ACC}_1.fq
-#rm ${SRR_ACC}_2.fq
