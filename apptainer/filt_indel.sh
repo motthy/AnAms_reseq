@@ -6,7 +6,7 @@
 #$ -l s_rt=720:00:00
 
 # isolate id
-ISOLATE=<set sample name>
+ISOLATE=$1
 
 REF=ref/AnAms1.0.genome.fa
 

@@ -9,7 +9,7 @@
 ## mapping ##
 
 # isolate id
-ISOLATE=<set sample name>
+ISOLATE=$1
 
 # apptainer container
 BWA=/usr/local/biotools/b/bwa:0.7.17--pl5.22.0_2

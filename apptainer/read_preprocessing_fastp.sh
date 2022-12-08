@@ -9,11 +9,11 @@
 ## QC and trimming fastq ##
 
 # isolate id
-ISOLATE=<set sample name>
+ISOLATE=$1
 
 # fastq
-FQ1=<set R1_fastq>
-FQ2=<set R1_fastq>
+FQ1=$2
+FQ2=$3
 
 # working directory
 mkdir $ISOLATE
