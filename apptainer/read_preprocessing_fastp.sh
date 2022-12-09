@@ -30,17 +30,17 @@ FASTP=/usr/local/biotools/f/fastp:0.23.1--h79da9fb_0
 cd $ISOLATE
 
 # 1.1 raw readsのstats
-apptainer exec --no-mount tmp $SEQKIT seqkit stats $FQ1 $FQ2 -o read-stats-raw.tsv
+apptainer exec $SEQKIT seqkit stats $FQ1 $FQ2 -o read-stats-raw.tsv
 
 # 1.2 raw readのqc
-apptainer exec --no-mount tmp $FASTQC fastqc $FQ1 --nogroup -o .
-apptainer exec --no-mount tmp $FASTQC fastqc $FQ2 --nogroup -o .
+apptainer exec $FASTQC fastqc $FQ1 --nogroup -o .
+apptainer exec $FASTQC fastqc $FQ2 --nogroup -o .
 
 # 1.3 readsのtrimmingとQC
 # bunzip2 -c $FQ1 > ${ISOLATE}_1.fq
 # bunzip2 -c $FQ2 > ${ISOLATE}_2.fq
 
-apptainer exec --no-mount tmp $FASTP fastp \
+apptainer exec $FASTP fastp \
     -i $FQ1 -o ${ISOLATE}_1.trim_fq.gz \
     -I $FQ2 -O ${ISOLATE}_2.trim_fq.gz \
     -h ${ISOLATE}_report.html \
@@ -48,9 +48,9 @@ apptainer exec --no-mount tmp $FASTP fastp \
 	-w 8
 
 # 1.4 trimmed readsのstats
-apptainer exec --no-mount tmp $SEQKIT seqkit stats ${ISOLATE}_1.trim.fq.gz ${ISOLATE}_2.trim.fq.gz -o read-stats.tsv
+apptainer exec $SEQKIT seqkit stats ${ISOLATE}_1.trim.fq.gz ${ISOLATE}_2.trim.fq.gz -o read-stats.tsv
 
 # 1.5 trimmed readのqc
-apptainer exec --no-mount tmp $FASTQC fastqc ${ISOLATE}_1.trim.fq.gz --nogroup -o .
-apptainer exec --no-mount tmp $FASTQC fastqc ${ISOLATE}_2.trim.fq.gz --nogroup -o .
+apptainer exec $FASTQC fastqc ${ISOLATE}_1.trim.fq.gz --nogroup -o .
+apptainer exec $FASTQC fastqc ${ISOLATE}_2.trim.fq.gz --nogroup -o .
 

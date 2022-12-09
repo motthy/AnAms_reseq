@@ -26,28 +26,28 @@ PICARD=/usr/local/biotools/p/picard:2.26.4--hdfd78af_0
 cd $ISOLATE
 
 # mapping w/BWA-MEM
-apptainer exec --no-mount tmp $BWA bwa mem -M \
+apptainer exec $BWA bwa mem -M \
              $REF \
              ${ISOLATE}_1.trim.fq.gz \
              ${ISOLATE}_2.trim.fq.gz > ${}.sam
 
 # samをbamに変換
-apptainer exec --no-mount tmp $SAMTOOLS \
+apptainer exec $SAMTOOLS \
              samtools view -b -@ 8 ${ISOLATE}.sam > ${ISOLATE}.bam
 
 # bamのソート
-apptainer exec --no-mount tmp $SAMTOOLS \
+apptainer exec $SAMTOOLS \
              samtools sort -@ 8 -m 10G ${ISOLATE}.bam > ${ISOLATE}.sort.bam
 
 # unalignd bam
-apptainer exec --no-mount tmp $PICARD \
+apptainer exec $PICARD \
              java -jar build/libs/picard.jar FastqToSam \
              FASTQ=${ISOLATE}_1.trim.fq.gz \
              FASTQ2=${ISOLATE}_2.trim.fq.gz \
              OUTPUT=${ISOLATE}.uBAM.bam
 
 # mapped bamとunaligned bamのマージ (realignment)
-apptainer exec --no-mount tmp $PICARD \
+apptainer exec $PICARD \
              java -jar build/libs/picard.jar MergeBamAlignment \
              ALIGNED_BAM=${ISOLATE}.sort.bam \
              UNMAPPED_BAM=${ISOLATE}.uBAM.bam \
@@ -55,12 +55,12 @@ apptainer exec --no-mount tmp $PICARD \
              OUTPUT=${ISOLATE}.merge.bam
 
 # unmapped bam
-apptainer exec --no-mount tmp $SAMTOOLS \
+apptainer exec $SAMTOOLS \
              samtools view -f 4 -@ 8 ${ISOLATE}.merge.bam \
              -o ${ISOLATE}_unmapped.bam
 
 # unmapped readsの抽出
-apptainer exec --no-mount tmp $PICARD \
+apptainer exec $PICARD \
              java -jar build/libs/picard.jar SamToFastq \
              VALIDATION_STRINGENCY=SILENT \
              INPUT=${ISOLATE}_unmapped.bam \
@@ -71,7 +71,7 @@ gzip -c ${ISOLATE}_unmapped.r1.fq > ${ISOLATE}_unmapped.r1.fq.gz
 gzip -c ${ISOLATE}_unmapped.r2.fq > ${ISOLATE}_unmapped.r2.fq.gz
 
 # PCR duplicateの除去
-apptainer exec --no-mount tmp $PICARD \
+apptainer exec $PICARD \
              java -jar build/libs/picard.jar MarkDuplicates \
              INPUT=${ISOLATE}.merge.bam \
              OUTPUT=${ISOLATE}.rmdup.bam \
@@ -81,8 +81,8 @@ apptainer exec --no-mount tmp $PICARD \
              TMP_DIR=./tmp
 
 # bamのstatisticsとindex作成
-apptainer exec --no-mount tmp $SAMTOOLS samtools stats ${ISOLATE}.rmdup.bam
-apptainer exec --no-mount tmp $SAMTOOLS samtools index -@ 8 ${ISOLATE}.rmdup.bam
+apptainer exec $SAMTOOLS samtools stats ${ISOLATE}.rmdup.bam
+apptainer exec $SAMTOOLS samtools index -@ 8 ${ISOLATE}.rmdup.bam
 
 # remove unsorted sam/bam and uncompressed files
 #rm ${ISOLATE}.sam

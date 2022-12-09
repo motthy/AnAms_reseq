@@ -15,7 +15,7 @@ ISOLATE=$1
 # reference
 REF=$(pwd)/ref/AnAms1.0.genome.fa
 
-# singularity container
+# apptainer container
 GATK=/usr/local/biotools/g/gatk4:4.2.2.0--hdfd78af_1
 PICARD=/usr/local/biotools/p/picard:2.26.4--hdfd78af_0
 
@@ -23,13 +23,13 @@ PICARD=/usr/local/biotools/p/picard:2.26.4--hdfd78af_0
 cd $ISOLATE
 
 # select SNP
-singularity exec $GATK gatk --java-options "-Xmx4G" SelectVariants \
+apptainer exec $GATK gatk --java-options "-Xmx4G" SelectVariants \
                     --variant variants_${ISOLATE}.genotype.g.vcf.gz \
                     --output variants_${ISOLATE}.snp.vcf.gz \
                     --reference $REF \
                     --select-type-to-include "SNP"
 
-singularity exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
+apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
      --feature-file variants_${ISOLATE}.snp.vcf.gz \
      --output variants_${ISOLATE}.snp.vcf.gz.tbi
 
@@ -47,7 +47,7 @@ singularity exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
 #     -filter "MQRankSum < -12.5" --filter-name "MQRankSum-12.5" \
 #     -filter "ReadPosRankSum < -8.0" --filter-name "ReadPosRankSum-8"
 
-singularity exec $GATK gatk --java-options "-Xmx4G" VariantFiltration \
+apptainer exec $GATK gatk --java-options "-Xmx4G" VariantFiltration \
      --variant variants_${ISOLATE}.snp.vcf.gz \
      --reference $REF \
      --output variants_${ISOLATE}.snp.filt.vcf.gz \
@@ -55,18 +55,18 @@ singularity exec $GATK gatk --java-options "-Xmx4G" VariantFiltration \
      --filter-name "snv_hard_filtering"
 
 ## index
-singularity exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
+apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
      --feature-file variants_${ISOLATE}.snp.filt.vcf.gz \
      --output variants_${ISOLATE}.snp.filt.vcf.gz.tbi
 
 # Allele Balance filtering
 ## heterozygous calls (ABHet=ref/(ref+alt)) ABHet < 0.2 or ABHet > 0.8 were removed
-singularity exec $PICARD \
+apptainer exec $PICARD \
              java -jar build/libs/picard.jar FilterVcf \
              INPUT=variants_${ISOLATE}.snp.filt.vcf.gz \
              OUTPUT=variants_${ISOLATE}.snp.ABHet.filt.vcf.gz \
              MIN_AB=0.2
 ## index
-singularity exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
+apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
      --feature-file variants_${ISOLATE}.snp.ABHet.filt.vcf.gz \
      --output variants_${ISOLATE}.snp.ABHet.filt.vcf.gz.tbi
