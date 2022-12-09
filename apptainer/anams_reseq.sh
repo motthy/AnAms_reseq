@@ -1,7 +1,7 @@
 #$ -S /bin/bash
 #$ -pe def_slot 8
 #$ -cwd
-#$ -l mem_req=10G,s_vmem=10G
+#$ -l mem_req=20G,s_vmem=20G
 #$ -l d_rt=720:00:00
 #$ -l s_rt=720:00:00
 

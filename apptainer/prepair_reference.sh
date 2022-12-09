@@ -1,3 +1,4 @@
+#!/bin/bash
 #$ -S /bin/bash
 #$ -pe def_slot 8
 #$ -cwd

@@ -1,3 +1,4 @@
+#!/bin/bash
 #$ -S /bin/bash
 #$ -pe def_slot 8
 #$ -cwd
@@ -6,7 +7,7 @@
 #$ -l s_rt=720:00:00
 #$ -V
 
-## DDBJの/usr/local/resources/dra/fastqから目的のfastqを取得してtrimmingとQCを行う ###
+## for trimming & QC ###
 
 # isolate id
 ISOLATE=$1
