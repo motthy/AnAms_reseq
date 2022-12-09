@@ -11,6 +11,9 @@
 # isolate id
 ISOLATE=$1
 
+# reference
+REF=$(pwd)/ref/AnAms1.0.genome.fa
+
 # apptainer container
 BWA=/usr/local/biotools/b/bwa:0.7.17--pl5.22.0_2
 SAMTOOLS=/usr/local/biotools/s/samtools:0.1.19--hfb9b9cc_8
@@ -18,9 +21,6 @@ PICARD=/usr/local/biotools/p/picard:2.26.4--hdfd78af_0
 
 # working directory
 cd $ISOLATE
-
-# reference
-REF=ref/AnAms1.0.genome.fa
 
 # mapping w/BWA-MEM
 apptainer exec --no-mount tmp $BWA bwa mem -M \

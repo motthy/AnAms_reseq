@@ -8,7 +8,8 @@
 # isolate id
 ISOLATE=$1
 
-REF=ref/AnAms1.0.genome.fa
+# reference
+REF=$(pwd)/ref/AnAms1.0.genome.fa
 
 # apptainer container
 GATK=/usr/local/biotools/g/gatk4:4.2.2.0--hdfd78af_1

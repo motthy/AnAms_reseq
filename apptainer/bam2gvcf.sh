@@ -10,14 +10,14 @@
 # isolate id
 ISOLATE=$1
 
+# reference
+REF=$(pwd)/ref/AnAms1.0.genome.fa
+
 # apptainer container
 GATK=/usr/local/biotools/g/gatk4:4.2.2.0--hdfd78af_1
 
 # working directory
 cd $ISOLATE
-
-# reference
-REF=$(pwd)/ref/AnAms1.0.genome.fa
 
 # GATK Haplotypecaller
 apptainer exec --no-mount tmp $GATK gatk --java-options "-Xmx4G" HaplotypeCaller \
