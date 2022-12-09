@@ -8,6 +8,8 @@
 
 ## make index for bwa ##
 
+set -eu
+
 # apptainer container
 BWA=/usr/local/biotools/b/bwa:0.7.17--pl5.22.0_2
 SAMTOOLS=/usr/local/biotools/s/samtools:0.1.19--hfb9b9cc_8

@@ -9,6 +9,8 @@
 
 ## for trimming & QC ###
 
+set -eu
+
 # isolate id
 ISOLATE=$1
 

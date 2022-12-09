@@ -7,6 +7,8 @@
 #$ -l s_rt=720:00:00
 #$ -V
 
+set -eu
+
 # isolate id
 ISOLATE=$1
 

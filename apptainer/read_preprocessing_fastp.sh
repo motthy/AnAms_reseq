@@ -9,6 +9,8 @@
 
 ## QC and trimming fastq ##
 
+set -eu
+
 # isolate id
 ISOLATE=$1
 

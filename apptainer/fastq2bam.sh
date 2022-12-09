@@ -9,6 +9,8 @@
 
 ## mapping ##
 
+set -eu
+
 # isolate id
 ISOLATE=$1
 

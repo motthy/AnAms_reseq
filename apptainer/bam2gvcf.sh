@@ -9,6 +9,8 @@
 
 ## variant calling ##
 
+set -eu
+
 # isolate id
 ISOLATE=$1
 
