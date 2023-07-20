@@ -41,14 +41,14 @@ apptainer exec $SAMTOOLS \
 
 # unalignd bam
 apptainer exec $PICARD \
-             java -jar build/libs/picard.jar FastqToSam \
+             picard FastqToSam \
              FASTQ=${ISOLATE}_1.trim.fq.gz \
              FASTQ2=${ISOLATE}_2.trim.fq.gz \
              OUTPUT=${ISOLATE}.uBAM.bam
 
 # mapped bamとunaligned bamのマージ (realignment)
 apptainer exec $PICARD \
-             java -jar build/libs/picard.jar MergeBamAlignment \
+             picard MergeBamAlignment \
              ALIGNED_BAM=${ISOLATE}.sort.bam \
              UNMAPPED_BAM=${ISOLATE}.uBAM.bam \
              REFERENCE_SEQUENCE=$REF \
@@ -61,7 +61,7 @@ apptainer exec $SAMTOOLS \
 
 # unmapped readsの抽出
 apptainer exec $PICARD \
-             java -jar build/libs/picard.jar SamToFastq \
+             picard SamToFastq \
              VALIDATION_STRINGENCY=SILENT \
              INPUT=${ISOLATE}_unmapped.bam \
              FASTQ=${ISOLATE}_unmapped.r1.fq \
@@ -72,7 +72,7 @@ gzip -c ${ISOLATE}_unmapped.r2.fq > ${ISOLATE}_unmapped.r2.fq.gz
 
 # PCR duplicateの除去
 apptainer exec $PICARD \
-             java -jar build/libs/picard.jar MarkDuplicates \
+             picard MarkDuplicates \
              INPUT=${ISOLATE}.merge.bam \
              OUTPUT=${ISOLATE}.rmdup.bam \
              METRICS_FILE=${ISOLATE}.metrics \
@@ -80,9 +80,21 @@ apptainer exec $PICARD \
              MAX_RECORDS_IN_RAM=1000000 \
              TMP_DIR=./tmp
 
+# @RGの追記
+apptainer exec $PICARD \
+　　　　　　　　picard AddOrReplaceReadGroups \
+　　　　　　　　INPUT=${ISOLATE}.rmdup.bam \
+    　　　　　 OUTPUT=${ISOLATE}.rmdup.addRG.bam \
+    　　　　　 RGID=${ISOLATE} \
+             RGLB=${ISOLATE} \
+             RGPU=${ISOLATE} \
+             RGPL=illumina \
+             RGSM=${ISOLATE} \
+             VALIDATION_STRINGENCY=LENIENT
+
 # bamのstatisticsとindex作成
-apptainer exec $SAMTOOLS samtools stats ${ISOLATE}.rmdup.bam
-apptainer exec $SAMTOOLS samtools index -@ 8 ${ISOLATE}.rmdup.bam
+apptainer exec $SAMTOOLS samtools stats ${ISOLATE}.rmdup.addRG.bam
+apptainer exec $SAMTOOLS samtools index -@ 8 ${ISOLATE}.rmdup.addRG.bam
 
 # remove unsorted sam/bam and uncompressed files
 #rm ${ISOLATE}.sam

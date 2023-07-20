@@ -25,11 +25,11 @@ cd $ISOLATE
 
 # GATK Haplotypecaller
 apptainer exec $GATK gatk --java-options "-Xmx4G" HaplotypeCaller \
-                    --input ${ISOLATE}.rmdup.bam \
+                    --input ${ISOLATE}.rmdup.addRG.bam \
                     --output ${ISOLATE}.g.vcf.gz \
                     --reference $REF \
                     --emit-ref-confidence GVCF\
-                    -max-alternate-alleles 2
+                    --max-alternate-alleles 2
 
 apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
      --feature-file ${ISOLATE}.g.vcf.gz \
