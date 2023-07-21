@@ -26,14 +26,14 @@ cd $ISOLATE
 # GATK Haplotypecaller
 apptainer exec $GATK gatk --java-options "-Xmx4G" HaplotypeCaller \
                     --input ${ISOLATE}.rmdup.addRG.bam \
-                    --output ${ISOLATE}.g.vcf.gz \
+                    --output variants_${ISOLATE}.g.vcf.gz \
                     --reference $REF \
                     --emit-ref-confidence GVCF\
                     --max-alternate-alleles 2
 
-apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
-     --feature-file ${ISOLATE}.g.vcf.gz \
-     --output ${ISORATE}.g.vcf.gz.tbi
+#apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
+#     --feature-file ${ISOLATE}.g.vcf.gz \
+#     --output ${ISORATE}.g.vcf.gz.tbi
 
 # GATK GenotypeGVCFs
 apptainer exec $GATK gatk --java-options "-Xmx4G" GenotypeGVCFs \
@@ -41,7 +41,7 @@ apptainer exec $GATK gatk --java-options "-Xmx4G" GenotypeGVCFs \
                     --output variants_${ISOLATE}.genotype.g.vcf.gz \
                     --reference $REF
 
-apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
-     --feature-file variants_${ISOLATE}.genotype.g.vcf.gz  \
-     --output variants_${ISOLATE}.genotype.g.vcf.gz.tbi
+#apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
+#     --feature-file variants_${ISOLATE}.genotype.g.vcf.gz  \
+#     --output variants_${ISOLATE}.genotype.g.vcf.gz.tbi
 
