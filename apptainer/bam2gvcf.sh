@@ -18,7 +18,7 @@ ISOLATE=$1
 REF=$(pwd)/ref/AnAms1.0.genome.fa
 
 # apptainer container
-GATK=/usr/local/biotools/g/gatk4:4.2.2.0--hdfd78af_1
+GATK=/usr/local/biotools/g/gatk4:4.4.0.0--py36hdfd78af_0
 
 # working directory
 cd $ISOLATE

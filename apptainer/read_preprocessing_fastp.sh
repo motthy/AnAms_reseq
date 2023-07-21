@@ -22,9 +22,9 @@ FQ2=$3
 mkdir $ISOLATE
 
 # singularity container
-FASTQC=/usr/local/biotools/f/fastqc:0.11.9--hdfd78af_1
-SEQKIT=/usr/local/biotools/s/seqkit:2.0.0--h9ee0642_0
-FASTP=/usr/local/biotools/f/fastp:0.23.1--h79da9fb_0
+FASTQC=/usr/local/biotools/f/fastqc:0.12.1--hdfd78af_0
+SEQKIT=/usr/local/biotools/s/seqkit:2.5.0--h9ee0642_0
+FASTP=/usr/local/biotools/f/fastp:0.23.4--hadf994f_2
 
 # working directory
 cd $ISOLATE
