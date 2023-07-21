@@ -51,18 +51,18 @@ apptainer exec $GATK gatk --java-options "-Xmx4G" VariantFiltration \
      --variant variants_${ISOLATE}.snp.vcf.gz \
      --reference $REF \
      --output variants_${ISOLATE}.snp.filt.vcf.gz \
-     --filterExpression 'QD < 2.0 || MQ < 40.0 || FS > 60.0 || SOR > 3.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0' \
+     --filter-expression 'QD < 2.0 || MQ < 40.0 || FS > 60.0 || SOR > 3.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0' \
      --filter-name "snv_hard_filtering"
 
 ## index
-apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
-     --feature-file variants_${ISOLATE}.snp.filt.vcf.gz \
-     --output variants_${ISOLATE}.snp.filt.vcf.gz.tbi
+#apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
+#     --feature-file variants_${ISOLATE}.snp.filt.vcf.gz \
+#     --output variants_${ISOLATE}.snp.filt.vcf.gz.tbi
 
 # Allele Balance filtering
 ## heterozygous calls (ABHet=ref/(ref+alt)) ABHet < 0.2 or ABHet > 0.8 were removed
 apptainer exec $PICARD \
-             java -jar build/libs/picard.jar FilterVcf \
+             picard FilterVcf \
              INPUT=variants_${ISOLATE}.snp.filt.vcf.gz \
              OUTPUT=variants_${ISOLATE}.snp.ABHet.filt.vcf.gz \
              MIN_AB=0.2
