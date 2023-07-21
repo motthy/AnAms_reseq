@@ -73,7 +73,7 @@ apptainer exec $PICARD \
              MIN_AB=0.2
 
 # index
-apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
-     --feature-file variants_${ISOLATE}.indel.ABHet.filt.vcf.gz \
-     --output variants_${ISOLATE}.indel.ABHet.filt.vcf.gz.tbi
+#apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
+#     --feature-file variants_${ISOLATE}.indel.ABHet.filt.vcf.gz \
+#     --output variants_${ISOLATE}.indel.ABHet.filt.vcf.gz.tbi
 

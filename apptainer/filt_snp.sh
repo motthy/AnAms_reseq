@@ -67,6 +67,6 @@ apptainer exec $PICARD \
              OUTPUT=variants_${ISOLATE}.snp.ABHet.filt.vcf.gz \
              MIN_AB=0.2
 ## index
-apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
-     --feature-file variants_${ISOLATE}.snp.ABHet.filt.vcf.gz \
-     --output variants_${ISOLATE}.snp.ABHet.filt.vcf.gz.tbi
+#apptainer exec $GATK gatk --java-options "-Xmx4G" IndexFeatureFile \
+#     --feature-file variants_${ISOLATE}.snp.ABHet.filt.vcf.gz \
+#     --output variants_${ISOLATE}.snp.ABHet.filt.vcf.gz.tbi
